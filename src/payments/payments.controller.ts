@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   Get,
   Headers,
@@ -12,14 +11,16 @@ import {
 import { PaymentsService } from './payments.service';
 import { CreatePaymentSessionDto } from './dto';
 import type { Request, Response } from 'express';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post('session')
+  @MessagePattern('payments.session.create')
   async createPaymentSession(
-    @Body() createPaymentSessionDto: CreatePaymentSessionDto,
+    @Payload() createPaymentSessionDto: CreatePaymentSessionDto,
   ) {
     return await this.paymentsService.createPaymentSession(
       createPaymentSessionDto,

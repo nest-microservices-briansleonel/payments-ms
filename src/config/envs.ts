@@ -4,7 +4,7 @@ import * as joi from 'joi';
 interface IEnvVars {
   PORT: number;
   //DATABASE_URL: string;
-  //NATS_SERVERS: string[];
+  NATS_SERVERS: string[];
   STRIPE_SECRET_KEY: string;
   STRIPE_SECRET_SIGNATURE: string;
   STRIPE_SUCCESS_URL: string;
@@ -21,13 +21,13 @@ const envVarsSchema: joi.ObjectSchema<IEnvVars> = joi
     STRIPE_CANCEL_URL: joi.string().required(),
     PAYMENTS_MS_URL: joi.string().required(),
     //DATABASE_URL: joi.string().required(),
-    //NATS_SERVERS: joi.array().items(joi.string()).required(),
+    NATS_SERVERS: joi.array().items(joi.string()).required(),
   })
   .unknown();
 
 const { error, value } = envVarsSchema.validate({
   ...process.env,
-  //NATS_SERVERS: process.env.NATS_SERVERS?.split(','),
+  NATS_SERVERS: process.env.NATS_SERVERS?.split(','),
 });
 
 if (error) {
@@ -44,5 +44,5 @@ export const envs = {
   stripeCancelUrl: env.STRIPE_CANCEL_URL,
   paymentsMsUrl: env.PAYMENTS_MS_URL,
   //databaseUrl: env.DATABASE_URL,
-  //natsServers: env.NATS_SERVERS,
+  natsServers: env.NATS_SERVERS,
 };
